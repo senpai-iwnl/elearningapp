@@ -190,3 +190,4 @@ D:\00-workspace\e-learning-app\obj\Debug\net9.0\refint\e-learning-app.dll
 D:\00-workspace\e-learning-app\obj\Debug\net9.0\e-learning-app.pdb
 D:\00-workspace\e-learning-app\obj\Debug\net9.0\e-learning-app.genruntimeconfig.cache
 D:\00-workspace\e-learning-app\obj\Debug\net9.0\ref\e-learning-app.dll
+D:\00-workspace\e-learning-app\obj\Debug\net9.0\e-learning-app.sourcelink.json
