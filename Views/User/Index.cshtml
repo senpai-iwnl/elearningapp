@@ -1,0 +1,36 @@
+﻿@model IEnumerable<e_learning_app.Models.User>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Lista użytkowników";
+}
+
+<h2>Lista użytkowników</h2>
+
+<a href="@Url.Action("Create")" class="btn btn-success">Dodaj użytkownika</a>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Rola</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.Username</td>
+            <td>@user.Email</td>
+            <td>@user.Role</td>
+            <td>
+                <a href="@Url.Action("Details", new { id = user.Id })" class="btn btn-info">Szczegóły</a>
+                <a href="@Url.Action("Edit", new { id = user.Id })" class="btn btn-warning">Edytuj</a>
+                <a href="@Url.Action("Delete", new { id = user.Id })" class="btn btn-danger">Usuń</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

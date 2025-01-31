@@ -1,0 +1,48 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Rejestracja";
+}
+
+@model e_learning_app.Models.User
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card p-4 shadow-lg" style="width: 100%; max-width: 400px; border-radius: 15px;">
+        <h2 class="text-center mb-4" style="color: #343a40; font-weight: 700;">Rejestracja</h2>
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger text-center">@ViewBag.ErrorMessage</div>
+        }
+
+        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+        <form asp-action="Register" asp-controller="Auth" method="post">
+            @Html.AntiForgeryToken()
+            <div class="form-floating mb-3">
+                <input type="text" name="FirstName" class="form-control" id="floatingFirstName" placeholder="Imię" required/>
+                <label for="floatingFirstName">Imię</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" name="LastName" class="form-control" id="floatingLastName" placeholder="Nazwisko" required/>
+                <label for="floatingLastName">Nazwisko</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" name="Username" class="form-control" id="floatingUsername" placeholder="Nazwa użytkownika" required/>
+                <label for="floatingUsername">Nazwa użytkownika</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" name="Email" class="form-control" id="floatingEmail" placeholder="Email" required/>
+                <label for="floatingEmail">Email</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" name="PasswordHash" class="form-control" id="floatingPassword" placeholder="Hasło" required/>
+                <label for="floatingPassword">Hasło</label>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Zarejestruj</button>
+            </div>
+        </form>
+
+        <p class="text-center mt-3">Masz już konto? <a href="@Url.Action("Login")" class="text-primary text-decoration-none">Zaloguj się</a></p>
+    </div>
+</div>

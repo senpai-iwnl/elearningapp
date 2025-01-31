@@ -1,0 +1,32 @@
+﻿@model e_learning_app.Models.User
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dodaj użytkownika";
+}
+
+<h2>Dodaj użytkownika</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label>Username</label>
+        <input type="text" name="Username" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="Email" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Hasło</label>
+        <input type="password" name="PasswordHash" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Rola</label>
+        <select name="Role" class="form-control">
+            <option value="Admin">Admin</option>
+            <option value="Nauczyciel">Nauczyciel</option>
+            <option value="Student">Student</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Dodaj</button>
+</form>
