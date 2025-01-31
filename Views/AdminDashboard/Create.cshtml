@@ -1,0 +1,54 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dodaj użytkownika";
+}
+
+@model e_learning_app.Models.User
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4" style="max-width: 500px; margin: auto;">
+        <h2 class="mb-4 text-center text-primary">Dodaj nowego użytkownika</h2>
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="form-floating mb-3">
+                <input type="text" name="FirstName" class="form-control" id="floatingFirstName" placeholder="Imię" required />
+                <label for="floatingFirstName">Imię</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" name="LastName" class="form-control" id="floatingLastName" placeholder="Nazwisko" required />
+                <label for="floatingLastName">Nazwisko</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" name="Username" class="form-control" id="floatingUsername" placeholder="Nazwa użytkownika" required />
+                <label for="floatingUsername">Nazwa użytkownika</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="email" name="Email" class="form-control" id="floatingEmail" placeholder="Email" required />
+                <label for="floatingEmail">Email</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="password" name="PasswordHash" class="form-control" id="floatingPassword" placeholder="Hasło" required />
+                <label for="floatingPassword">Hasło</label>
+            </div>
+
+            <div class="mb-3">
+                <label for="Role" class="form-label">Rola</label>
+                <select name="Role" class="form-select" id="Role">
+                    <option value="Student">Student</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Teacher">Nauczyciel</option>
+                </select>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success btn-lg">Dodaj</button>
+                <a href="@Url.Action("Index", "AdminDashboard")" class="btn btn-secondary btn-lg">Powrót</a>
+            </div>
+        </form>
+    </div>
+</div>

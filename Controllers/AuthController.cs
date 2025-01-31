@@ -48,7 +48,15 @@ public class AuthController : Controller
             authProperties
         );
 
-        return RedirectToAction("Index", "Home");
+        // Przekierowanie w zależności od roli użytkownika
+        if (user.Role == "Admin")
+        {
+            return RedirectToAction("Index", "AdminDashboard");
+        }
+        else
+        {
+            return RedirectToAction("Index", "Home");
+        }
     }
 
     [HttpGet]
