@@ -51,7 +51,12 @@ public class AuthController : Controller
         );
 
         // Przekierowanie w zależności od roli użytkownika
-        return user.Role == "Admin" ? RedirectToAction("Index", "AdminDashboard") : RedirectToAction("Index", "Home");
+        return user.Role switch
+        {
+            "Admin" => RedirectToAction("Index", "AdminDashboard"),
+            "Teacher" => RedirectToAction("Index", "TeacherDashboard"),
+            _ => RedirectToAction("Index", "Home")
+        };
     }
 
     [HttpGet]
