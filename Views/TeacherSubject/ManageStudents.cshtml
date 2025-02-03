@@ -1,0 +1,56 @@
+﻿@model e_learning_app.Models.ManageStudentsViewModel
+
+@{
+ViewData["Title"] = "Zarządzaj Studentami";
+Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Zarządzaj Studentami dla @Model.Subject.Name</h2>
+
+<h3>Aktualni Studenci</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Imię i Nazwisko</th>
+        <th>Email</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var student in Model.Subject.Students)
+    {
+    <tr>
+        <td>@student.FirstName @student.LastName</td>
+        <td>@student.Email</td>
+        <td>
+            <form asp-action="RemoveStudent" method="post">
+                <input type="hidden" name="subjectId" value="@Model.Subject.Id" />
+                <input type="hidden" name="studentId" value="@student.Id" />
+                <button type="submit" class="btn btn-sm btn-danger">Usuń</button>
+            </form>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+
+<h3>Dodaj Studenta</h3>
+<form asp-action="AddStudent" method="post">
+    <input type="hidden" name="subjectId" value="@Model.Subject.Id" />
+    <div class="form-group">
+        <label for="studentId">Wybierz Studenta</label>
+        <select name="studentId" class="form-control">
+            @foreach (var student in Model.AllStudents)
+            {
+            if (!Model.SelectedStudents.Contains(student.Id))
+            {
+            <option value="@student.Id">@student.FirstName @student.LastName</option>
+            }
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-sm btn-success mt-2">Dodaj</button>
+</form>
+
+<!-- Przycisk Powrotu -->
+<a href="@Url.Action("Details", "TeacherSubject", new { id = Model.Subject.Id })" class="btn btn-secondary mt-3">Powrót</a>

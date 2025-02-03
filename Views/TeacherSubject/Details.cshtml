@@ -8,7 +8,13 @@ Layout = "~/Views/Shared/_Layout.cshtml";
 <h2>@Model.Name</h2>
 <p>@Model.Description</p>
 
+<!-- Przycisk do edycji przedmiotu -->
+<a href="@Url.Action("Edit", "TeacherDashboard", new { id = Model.Id })" class="btn btn-warning mb-3">Edytuj Przedmiot</a>
+
 <a href="@Url.Action("AddClass", "TeacherSubject", new { subjectId = Model.Id })" class="btn btn-success mb-3">Dodaj Klasę</a>
+
+<!-- Przycisk do zarządzania studentami -->
+<a href="@Url.Action("ManageStudents", "TeacherSubject", new { id = Model.Id })" class="btn btn-info mb-3">Zarządzaj Studentami</a>
 
 <table class="table table-striped">
     <thead>
