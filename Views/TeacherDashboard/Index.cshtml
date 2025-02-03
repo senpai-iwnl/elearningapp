@@ -1,0 +1,35 @@
+﻿@model IEnumerable<e_learning_app.Models.Subject>
+
+@{
+ViewData["Title"] = "Twoje Przedmioty";
+Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Twoje Przedmioty</h2>
+
+<a href="@Url.Action("Create", "TeacherDashboard")" class="btn btn-success mb-3">Dodaj Nowy Przedmiot</a>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Nazwa</th>
+        <th>Opis</th>
+        <th>Kod Dołączenia</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var subject in Model)
+    {
+    <tr>
+        <td>@subject.Name</td>
+        <td>@subject.Description</td>
+        <td><strong>@subject.JoinCode</strong></td>
+        <td>
+            <a href="@Url.Action("Edit", "TeacherDashboard", new { id = subject.Id })" class="btn btn-primary btn-sm">Edytuj</a>
+            <a href="@Url.Action("Delete", "TeacherDashboard", new { id = subject.Id })" class="btn btn-danger btn-sm">Usuń</a>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>

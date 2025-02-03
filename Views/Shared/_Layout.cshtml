@@ -43,6 +43,12 @@
                 {
                 <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "AdminDashboard")">Admin Panel</a></li>
                 }
+                @if (User.IsInRole("Teacher"))
+                {
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "TeacherDashboard")">Teacher Dashboard</a>
+                </li>
+                }
                 @if (User.Identity.IsAuthenticated)
                 {
                 <li class="nav-item"><a class="nav-link" href="/Auth/Logout">Wyloguj</a></li>

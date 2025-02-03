@@ -23,59 +23,60 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Unikalność adresu email
+        // 🔹 Unikalność adresu email dla użytkowników
         modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
 
-        // Relacja: Class -> Subject (Jeden do wielu)
+        // 🔹 Relacja: Subject -> Creator (Twórca przedmiotu, jeden-do-wielu)
+        modelBuilder.Entity<Subject>()
+            .HasOne(s => s.Creator)
+            .WithMany(u => u.Subjects) // Użytkownik może stworzyć wiele przedmiotów
+            .HasForeignKey(s => s.CreatorId)
+            .OnDelete(DeleteBehavior.Restrict); // Nie pozwalamy na usunięcie twórcy przedmiotu
+
+        // 🔹 Relacja: Subject -> Classes (Jeden przedmiot może mieć wiele klas)
         modelBuilder.Entity<Class>()
             .HasOne(c => c.Subject)
             .WithMany(s => s.Classes)
-            .HasForeignKey(c => c.SubjectId);
+            .HasForeignKey(c => c.SubjectId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-        // Relacja: Class -> User (Twórca kursu, jeden-do-wielu)
-        modelBuilder.Entity<Class>()
-            .HasOne(c => c.Creator)
-            .WithMany(u => u.Classes) // Użytkownik może stworzyć wiele klas
-            .HasForeignKey(c => c.CreatorId)
-            .OnDelete(DeleteBehavior.Restrict); // Nie pozwalamy na usunięcie twórcy klasy
-
-        // Relacja wiele-do-wielu: User <-> Class (studenci zapisani na kurs)
-        modelBuilder.Entity<Class>()
-            .HasMany(c => c.Students)
-            .WithMany(u => u.EnrolledClasses)
+        // 🔹 Relacja wiele-do-wielu: Subject <-> Students (zapisani na przedmiot)
+        modelBuilder.Entity<Subject>()
+            .HasMany(s => s.Students)
+            .WithMany(u => u.EnrolledSubjects)
             .UsingEntity<Dictionary<string, object>>(
-                "ClassStudent",
+                "SubjectStudent",
                 j => j.HasOne<User>().WithMany().HasForeignKey("StudentId"),
-                j => j.HasOne<Class>().WithMany().HasForeignKey("ClassId")
+                j => j.HasOne<Subject>().WithMany().HasForeignKey("SubjectId")
             );
-
-        // Relacja: Document -> Subject (Jeden do wielu)
+        
+        // 🔹 Relacja: Document -> Subject (Jeden do wielu)
         modelBuilder.Entity<Document>()
-            .HasOne(d => d.Subject)
-            .WithMany(s => s.Documents)
+            .HasOne(d => d.Class)
+            .WithMany(c => c.Documents)
             .HasForeignKey(d => d.SubjectId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        // Relacja: Document -> Class (Jeden do wielu)
+        // 🔹 Relacja: Document -> Class (Jeden do wielu)
         modelBuilder.Entity<Document>()
             .HasOne(d => d.Class)
             .WithMany(c => c.Documents)
             .HasForeignKey(d => d.ClassId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        // Relacja: Test -> Subject (Jeden do wielu)
+        // 🔹 Relacja: Test -> Subject (Jeden do wielu)
         modelBuilder.Entity<Test>()
             .HasOne(t => t.Subject)
             .WithMany()
             .HasForeignKey(t => t.SubjectId);
 
-        // Relacja: Project -> User (Jeden do wielu)
+        // 🔹 Relacja: Project -> User (Jeden do wielu)
         modelBuilder.Entity<Project>()
             .HasOne(p => p.Student)
             .WithMany()
             .HasForeignKey(p => p.StudentId);
 
-        // Relacja wiele-do-wielu: Group <-> User
+        // 🔹 Relacja wiele-do-wielu: Group <-> User
         modelBuilder.Entity<Group>()
             .HasMany(g => g.Students)
             .WithMany();

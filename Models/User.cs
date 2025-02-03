@@ -24,9 +24,9 @@ public class User
 
     public string Role { get; set; } // Admin, Nauczyciel, Student
 
-    // Klasy, których użytkownik jest twórcą
-    public List<Class> Classes { get; set; } = new List<Class>();
+    // Przedmioty, których użytkownik jest twórcą
+    public List<Subject> Subjects { get; set; } = new List<Subject>();
 
-    // Klasy, do których użytkownik dołączył jako student
-    public List<Class> EnrolledClasses { get; set; } = new List<Class>();
+    // Przedmioty, do których użytkownik dołączył jako student
+    public List<Subject> EnrolledSubjects { get; set; } = new List<Subject>();
 }
