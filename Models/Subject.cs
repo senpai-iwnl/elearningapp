@@ -22,6 +22,9 @@ public class Subject
     [Required] 
     [MaxLength(10)] public string JoinCode { get; set; } = GenerateJoinCode();
     
+    // 🔹 Nowe pole: Wiadomości powiązane z przedmiotem
+    public List<Message> Messages { get; set; } = new List<Message>();
+    
     private static string GenerateJoinCode()
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

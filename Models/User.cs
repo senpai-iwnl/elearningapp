@@ -31,4 +31,6 @@ public class User
     public List<Subject> EnrolledSubjects { get; set; } = new List<Subject>();
     // 🔹 Relacja wiele-do-wielu z grupami
     public List<Group> Groups { get; set; } = new List<Group>(); // Grupy, do których użytkownik należy
+    // 🔹 Nowe pole: Wiadomości wysłane przez użytkownika
+    public List<Message> SentMessages { get; set; } = new List<Message>();
 }

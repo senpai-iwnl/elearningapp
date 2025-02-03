@@ -18,6 +18,7 @@ public class AppDbContext : DbContext
     public DbSet<Question> Questions { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Group> Groups { get; set; }
+    public DbSet<Message> Messages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -79,7 +80,7 @@ public class AppDbContext : DbContext
                 j => j.HasOne<User>().WithMany().HasForeignKey("UserId"),
                 j => j.HasOne<Group>().WithMany().HasForeignKey("GroupId")
             );
-        
+
         modelBuilder.Entity<Group>()
             .HasOne(g => g.Subject)
             .WithMany(s => s.Groups)
@@ -87,5 +88,18 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.Cascade); // Usunięcie przedmiotu usuwa wszystkie jego grupy
 
 
+        // 🔹 Relacja: Wiadomości -> Użytkownik (nadawca)
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Sender)
+            .WithMany(u => u.SentMessages)
+            .HasForeignKey(m => m.SenderId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // 🔹 Relacja: Wiadomości -> Przedmiot (opcjonalna)
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Subject)
+            .WithMany(s => s.Messages)
+            .HasForeignKey(m => m.SubjectId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

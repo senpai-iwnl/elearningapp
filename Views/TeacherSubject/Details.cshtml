@@ -19,6 +19,27 @@ Layout = "~/Views/Shared/_Layout.cshtml";
 <!-- Przycisk do zarządzania grupami -->
 <a href="@Url.Action("ManageGroups", "TeacherGroup", new { id = Model.Id })" class="btn btn-secondary mb-3">Zarządzaj Grupami</a>
 
+<h3 class="mt-4">Wiadomości dla tego przedmiotu</h3>
+
+@if (Model.Messages != null && Model.Messages.Count > 0)
+{
+    <ul class="list-group">
+        @foreach (var message in Model.Messages.OrderByDescending(m => m.CreatedAt))
+        {
+            <li class="list-group-item">
+                <strong>@message.CreatedAt.ToLocalTime():</strong> @message.Content
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Brak wiadomości.</p>
+}
+
+<br/><br/>
+
+<h3 class="mt-4">Zajęcia</h3>
 <table class="table table-striped">
     <thead>
     <tr>
@@ -31,36 +52,38 @@ Layout = "~/Views/Shared/_Layout.cshtml";
     <tbody>
     @foreach (var classItem in Model.Classes)
     {
-    <tr>
-        <td>@classItem.Name</td>
-        <td>@classItem.Description</td>
-        <td>
-            @if (classItem.Documents.Any())
-            {
-            <ul>
-                @foreach (var doc in classItem.Documents)
+        <tr>
+            <td>@classItem.Name</td>
+            <td>@classItem.Description</td>
+            <td>
+                @if (classItem.Documents.Any())
                 {
-                <li>
-                    @doc.FileName
-                    <a href="@Url.Action("DownloadDocument", "TeacherSubject", new { documentId = doc.Id })"
-                       class="btn btn-sm btn-outline-primary">Pobierz</a>
-                </li>
+                    <ul>
+                        @foreach (var doc in classItem.Documents)
+                        {
+                            <li>
+                                @doc.FileName
+                                <a href="@Url.Action("DownloadDocument", "TeacherSubject", new { documentId = doc.Id })"
+                                   class="btn btn-sm btn-outline-primary">Pobierz</a>
+                            </li>
+                        }
+                    </ul>
                 }
-            </ul>
-            }
-            else
-            {
-            <span>Brak załączników</span>
-            }
-        </td>
-        <td>
-            <a href="@Url.Action("EditClass", "TeacherClass", new { id = classItem.Id })" class="btn btn-primary btn-sm">Edytuj</a>
-            <a href="@Url.Action("DeleteClass", "TeacherClass", new { id = classItem.Id })" class="btn btn-danger btn-sm">Usuń</a>
-        </td>
-    </tr>
+                else
+                {
+                    <span>Brak załączników</span>
+                }
+            </td>
+            <td>
+                <a href="@Url.Action("EditClass", "TeacherClass", new { id = classItem.Id })" class="btn btn-primary btn-sm">Edytuj</a>
+                <a href="@Url.Action("DeleteClass", "TeacherClass", new { id = classItem.Id })" class="btn btn-danger btn-sm">Usuń</a>
+            </td>
+        </tr>
     }
     </tbody>
 </table>
+
+<br/><br/>
 
 <h3 class="mt-4">Wszystkie Załączniki Powiązane z Tym Przedmiotem</h3>
 

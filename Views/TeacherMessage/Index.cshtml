@@ -1,0 +1,37 @@
+﻿@model IEnumerable<e_learning_app.Models.Message>
+
+@{
+    ViewData["Title"] = "Twoje Wiadomości";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Twoje Wiadomości</h2>
+
+<a href="@Url.Action("Create", "TeacherMessage")" class="btn btn-success mb-3">Nowa Wiadomość</a>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Treść</th>
+        <th>Przedmiot</th>
+        <th>Data</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var message in Model)
+    {
+        <tr>
+            <td>@message.Content</td>
+            <td>@(message.Subject != null ? message.Subject.Name : "Ogólna wiadomość")</td>
+            <td>@message.CreatedAt.ToLocalTime()</td>
+            <td>
+                <form asp-action="Delete" asp-controller="TeacherMessage" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@message.Id" />
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Usuń</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
