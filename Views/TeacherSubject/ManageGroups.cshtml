@@ -1,0 +1,62 @@
+﻿@model e_learning_app.Models.ManageGroupsViewModel
+
+@{
+ViewData["Title"] = "Zarządzaj Grupami";
+Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Zarządzaj Grupami dla @Model.Subject.Name</h2>
+
+<h3>Lista Grup</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Nazwa Grupy</th>
+        <th>Studenci</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var group in Model.Groups)
+    {
+    <tr>
+        <td>@group.Name</td>
+        <td>
+            @if (group.Students.Any())
+            {
+            <ul>
+                @foreach (var student in group.Students)
+                {
+                <li>@student.FirstName @student.LastName</li>
+                }
+            </ul>
+            }
+            else
+            {
+            <span>Brak studentów</span>
+            }
+        </td>
+        <td>
+            <a href="@Url.Action("EditGroup", "TeacherSubject", new { id = group.Id })" class="btn btn-sm btn-warning">Edytuj Grupę</a>
+            <form asp-action="DeleteGroup" method="post" style="display:inline;">
+                <input type="hidden" name="groupId" value="@group.Id" />
+                <button type="submit" class="btn btn-sm btn-danger">Usuń Grupę</button>
+            </form>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+
+<h3>Dodaj Nową Grupę</h3>
+<form asp-action="AddGroup" method="post">
+    <input type="hidden" name="subjectId" value="@Model.Subject.Id" />
+    <div class="form-group">
+        <label for="groupName">Nazwa Grupy</label>
+        <input type="text" name="groupName" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-sm btn-success mt-2">Dodaj Grupę</button>
+</form>
+
+<!-- Przycisk Powrotu -->
+<a href="@Url.Action("Details", "TeacherSubject", new { id = Model.Subject.Id })" class="btn btn-secondary mt-3">Powrót</a>

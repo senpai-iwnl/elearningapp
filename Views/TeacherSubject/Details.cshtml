@@ -16,6 +16,9 @@ Layout = "~/Views/Shared/_Layout.cshtml";
 <!-- Przycisk do zarządzania studentami -->
 <a href="@Url.Action("ManageStudents", "TeacherSubject", new { id = Model.Id })" class="btn btn-info mb-3">Zarządzaj Studentami</a>
 
+<!-- Przycisk do zarządzania grupami -->
+<a href="@Url.Action("ManageGroups", "TeacherSubject", new { id = Model.Id })" class="btn btn-secondary mb-3">Zarządzaj Grupami</a>
+
 <table class="table table-striped">
     <thead>
     <tr>
@@ -58,41 +61,3 @@ Layout = "~/Views/Shared/_Layout.cshtml";
     }
     </tbody>
 </table>
-
-<h3 class="mt-4">Wszystkie Załączniki Powiązane z Tym Przedmiotem</h3>
-@if (Model.Classes.SelectMany(c => c.Documents).Any())
-{
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        <th>Nazwa Pliku</th>
-        <th>Klasa</th>
-        <th>Akcje</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var classItem in Model.Classes)
-    {
-    foreach (var doc in classItem.Documents)
-    {
-    <tr>
-        <td>@doc.FileName</td>
-        <td>@classItem.Name</td>
-        <td>
-            <a href="@Url.Action("DownloadDocument", "TeacherSubject", new { documentId = doc.Id })"
-               class="btn btn-sm btn-outline-primary">Pobierz</a>
-            <form asp-action="DeleteDocument" method="post" style="display:inline;">
-                <input type="hidden" name="documentId" value="@doc.Id" />
-                <button type="submit" class="btn btn-sm btn-outline-danger">Usuń</button>
-            </form>
-        </td>
-    </tr>
-    }
-    }
-    </tbody>
-</table>
-}
-else
-{
-<p>Brak załączników w tym przedmiocie.</p>
-}
