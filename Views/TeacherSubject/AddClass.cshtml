@@ -1,0 +1,28 @@
+﻿@model e_learning_app.Models.Class
+
+@{
+    ViewData["Title"] = "Dodaj Klasę";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dodaj Klasę</h2>
+
+<form asp-action="AddClass" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="subjectId" value="@ViewBag.SubjectId" />
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="attachment">Załącznik</label>
+        <input type="file" name="attachment" class="form-control" />
+    </div>
+    <br/>
+    <button type="submit" class="btn btn-success">Dodaj</button>
+    <a href="@Url.Action("Details", "TeacherSubject", new { id = ViewBag.SubjectId })" class="btn btn-secondary">Anuluj</a>
+</form>

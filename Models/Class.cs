@@ -12,7 +12,7 @@ public class Class
     public string Description { get; set; }
         
     public Guid SubjectId { get; set; }
-    public Subject Subject { get; set; }
+    public Subject? Subject { get; set; }
 
     public List<Document> Documents { get; set; } = new List<Document>();
 }

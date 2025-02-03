@@ -49,20 +49,14 @@ public class AppDbContext : DbContext
                 j => j.HasOne<User>().WithMany().HasForeignKey("StudentId"),
                 j => j.HasOne<Subject>().WithMany().HasForeignKey("SubjectId")
             );
-        
-        // 🔹 Relacja: Document -> Subject (Jeden do wielu)
-        modelBuilder.Entity<Document>()
-            .HasOne(d => d.Class)
-            .WithMany(c => c.Documents)
-            .HasForeignKey(d => d.SubjectId)
-            .OnDelete(DeleteBehavior.SetNull);
 
         // 🔹 Relacja: Document -> Class (Jeden do wielu)
         modelBuilder.Entity<Document>()
             .HasOne(d => d.Class)
             .WithMany(c => c.Documents)
             .HasForeignKey(d => d.ClassId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Cascade); // Jeśli klasa zostanie usunięta, usuwamy dokumenty
+
 
         // 🔹 Relacja: Test -> Subject (Jeden do wielu)
         modelBuilder.Entity<Test>()

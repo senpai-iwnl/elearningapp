@@ -22,7 +22,12 @@ Layout = "~/Views/Shared/_Layout.cshtml";
     @foreach (var subject in Model)
     {
     <tr>
-        <td>@subject.Name</td>
+        <td>
+            <!-- Kliknięcie na nazwę przedmiotu przenosi do szczegółów -->
+            <a href="@Url.Action("Details", "TeacherSubject", new { id = subject.Id })">
+                @subject.Name
+            </a>
+        </td>
         <td>@subject.Description</td>
         <td><strong>@subject.JoinCode</strong></td>
         <td>

@@ -1,0 +1,92 @@
+﻿@model e_learning_app.Models.Subject
+
+@{
+ViewData["Title"] = "Szczegóły Przedmiotu";
+Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Name</h2>
+<p>@Model.Description</p>
+
+<a href="@Url.Action("AddClass", "TeacherSubject", new { subjectId = Model.Id })" class="btn btn-success mb-3">Dodaj Klasę</a>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Nazwa Klasy</th>
+        <th>Opis</th>
+        <th>Załączniki</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var classItem in Model.Classes)
+    {
+    <tr>
+        <td>@classItem.Name</td>
+        <td>@classItem.Description</td>
+        <td>
+            @if (classItem.Documents.Any())
+            {
+            <ul>
+                @foreach (var doc in classItem.Documents)
+                {
+                <li>
+                    @doc.FileName
+                    <a href="@Url.Action("DownloadDocument", "TeacherSubject", new { documentId = doc.Id })"
+                       class="btn btn-sm btn-outline-primary">Pobierz</a>
+                </li>
+                }
+            </ul>
+            }
+            else
+            {
+            <span>Brak załączników</span>
+            }
+        </td>
+        <td>
+            <a href="@Url.Action("EditClass", "TeacherSubject", new { id = classItem.Id })" class="btn btn-primary btn-sm">Edytuj</a>
+            <a href="@Url.Action("DeleteClass", "TeacherSubject", new { id = classItem.Id })" class="btn btn-danger btn-sm">Usuń</a>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+
+<h3 class="mt-4">Wszystkie Załączniki Powiązane z Tym Przedmiotem</h3>
+@if (Model.Classes.SelectMany(c => c.Documents).Any())
+{
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Nazwa Pliku</th>
+        <th>Klasa</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var classItem in Model.Classes)
+    {
+    foreach (var doc in classItem.Documents)
+    {
+    <tr>
+        <td>@doc.FileName</td>
+        <td>@classItem.Name</td>
+        <td>
+            <a href="@Url.Action("DownloadDocument", "TeacherSubject", new { documentId = doc.Id })"
+               class="btn btn-sm btn-outline-primary">Pobierz</a>
+            <form asp-action="DeleteDocument" method="post" style="display:inline;">
+                <input type="hidden" name="documentId" value="@doc.Id" />
+                <button type="submit" class="btn btn-sm btn-outline-danger">Usuń</button>
+            </form>
+        </td>
+    </tr>
+    }
+    }
+    </tbody>
+</table>
+}
+else
+{
+<p>Brak załączników w tym przedmiocie.</p>
+}
