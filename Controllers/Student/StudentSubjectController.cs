@@ -28,6 +28,8 @@ public class StudentSubjectController : Controller
         var userId = GetUserId();
 
         var subject = await _context.Subjects
+            .Include(s => s.Creator)
+            .Include(s => s.Messages)
             .Include(s => s.Classes)
             .ThenInclude(c => c.Documents)
             .FirstOrDefaultAsync(s => s.Id == id);

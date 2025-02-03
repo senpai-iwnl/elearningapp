@@ -6,10 +6,31 @@
 }
 
 <h2>@Model.Name</h2>
+<h4>Twórca: @Model.Creator.FirstName @Model.Creator.LastName</h4>
 <p>@Model.Description</p>
 
-<h3 class="mt-4">Lista Klas</h3>
+<h3 class="mt-4">Wiadomości dla tego przedmiotu</h3>
 
+@if (Model.Messages != null && Model.Messages.Count > 0)
+{
+<ul class="list-group">
+    @foreach (var message in Model.Messages.OrderByDescending(m => m.CreatedAt))
+    {
+    <li class="list-group-item">
+        <strong>@message.CreatedAt.ToLocalTime():</strong> @message.Content
+    </li>
+    }
+</ul>
+}
+else
+{
+<p>Brak wiadomości.</p>
+}
+
+<br/><br/>
+
+
+<h3 class="mt-4">Zajęcia</h3>
 <table class="table table-striped">
     <thead>
     <tr>
@@ -47,6 +68,8 @@
     }
     </tbody>
 </table>
+
+<br/><br/>
 
 <h3 class="mt-4">Wszystkie Załączniki Powiązane z Tym Przedmiotem</h3>
 @if (Model.Classes.SelectMany(c => c.Documents).Any())

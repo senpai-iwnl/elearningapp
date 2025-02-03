@@ -1,0 +1,44 @@
+﻿@model e_learning_app.Models.StudentMessagesViewModel
+
+@{
+    ViewData["Title"] = "Twoje Wiadomości";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Twoje Wiadomości</h2>
+
+<h3>Ogólne Wiadomości</h3>
+@if (Model.GeneralMessages.Any())
+{
+    <ul class="list-group">
+        @foreach (var message in Model.GeneralMessages)
+        {
+            <li class="list-group-item">
+                <strong>@message.CreatedAt.ToLocalTime():</strong> @message.Content
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Brak ogólnych wiadomości.</p>
+}
+
+<h3 class="mt-4">Wiadomości z Twoich Przedmiotów</h3>
+@if (Model.SubjectMessages.Any())
+{
+    <ul class="list-group">
+        @foreach (var message in Model.SubjectMessages)
+        {
+            <li class="list-group-item">
+                <strong>@message.CreatedAt.ToLocalTime()</strong> 
+                - @message.Content 
+                <span class="badge bg-primary">@message.Subject.Name</span>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Brak wiadomości związanych z Twoimi przedmiotami.</p>
+}

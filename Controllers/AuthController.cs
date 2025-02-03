@@ -54,8 +54,8 @@ public class AuthController : Controller
         return user.Role switch
         {
             "Admin" => RedirectToAction("Index", "AdminDashboard"),
-            "Teacher" => RedirectToAction("Index", "TeacherDashboard"),
-            "Student" => RedirectToAction("Index", "StudentDashboard"),
+            "Teacher" => RedirectToAction("Index", "TeacherMessage"),
+            "Student" => RedirectToAction("Index", "StudentMessage"),
             _ => RedirectToAction("Index", "Home")
         };
     }
