@@ -1,31 +1,35 @@
-﻿using e_learning_app.Models;
-using e_learning_app.Services;
+﻿using e_learning_app.Data;
+using e_learning_app.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace e_learning_app.Controllers;
 
 [Authorize(Roles = "Admin")]
 public class AdminDashboardController : Controller
 {
-    private readonly IUserService _userService;
+    private readonly AppDbContext _context;
 
-    public AdminDashboardController(IUserService userService)
+    public AdminDashboardController(AppDbContext context)
     {
-        _userService = userService;
+        _context = context;
     }
-    
+
+    // Wyświetlanie listy użytkowników
     public async Task<IActionResult> Index()
     {
-        var users = await _userService.GetAllUsers();
+        var users = await _context.Users.ToListAsync();
         return View(users);
     }
-    
+
+    // GET: Formularz tworzenia nowego użytkownika
     public IActionResult Create()
     {
         return View();
     }
-    
+
+    // POST: Tworzenie użytkownika
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(User user)
@@ -35,23 +39,24 @@ public class AdminDashboardController : Controller
             return View(user);
         }
 
-        var existingUser = await _userService.GetUserByEmail(user.Email);
+        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
         if (existingUser != null)
         {
             ViewBag.ErrorMessage = "Użytkownik z tym adresem e-mail już istnieje.";
             return View(user);
         }
 
-        user.Role ??= "Student"; 
-        await _userService.CreateUser(user);
+        user.Role ??= "Student"; // Domyślna rola
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
 
         return RedirectToAction("Index");
     }
 
-    // ✅ GET: Formularz edycji użytkownika
+    // GET: Formularz edycji użytkownika
     public async Task<IActionResult> Edit(Guid id)
     {
-        var user = await _userService.GetUserById(id);
+        var user = await _context.Users.FindAsync(id);
         if (user == null)
         {
             return NotFound();
@@ -60,24 +65,44 @@ public class AdminDashboardController : Controller
         return View(user);
     }
 
-    // ✅ POST: Aktualizacja użytkownika
+    // POST: Aktualizacja użytkownika
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid id, User user)
+    public async Task<IActionResult> Edit(Guid id, User updatedUser)
     {
         if (!ModelState.IsValid)
         {
-            return View(user);
+            return View(updatedUser);
         }
 
-        await _userService.UpdateUser(id, user);
+        var user = await _context.Users.FindAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        user.Username = updatedUser.Username;
+        user.Email = updatedUser.Email;
+        user.FirstName = updatedUser.FirstName;
+        user.LastName = updatedUser.LastName;
+        user.Role = updatedUser.Role;
+
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }
 
-    // ✅ Usuwanie użytkownika
+    // Usuwanie użytkownika
     public async Task<IActionResult> Delete(Guid id)
     {
-        await _userService.DeleteUser(id);
+        var user = await _context.Users.FindAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }
 }

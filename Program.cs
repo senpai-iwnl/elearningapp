@@ -1,5 +1,4 @@
 using e_learning_app.Data;
-using e_learning_app.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,8 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Rejestracja serwisu użytkowników
-builder.Services.AddScoped<IUserService, UserService>();
 
 // Konfiguracja uwierzytelniania (Cookie Authentication)
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

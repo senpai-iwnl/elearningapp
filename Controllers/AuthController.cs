@@ -1,19 +1,20 @@
 ﻿using System.Security.Claims;
+using e_learning_app.Data;
 using e_learning_app.Models;
-using e_learning_app.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace e_learning_app.Controllers;
 
 public class AuthController : Controller
 {
-    private readonly IUserService _userService;
+    private readonly AppDbContext _context;
 
-    public AuthController(IUserService userService)
+    public AuthController(AppDbContext context)
     {
-        _userService = userService;
+        _context = context;
     }
 
     [HttpGet]
@@ -25,7 +26,7 @@ public class AuthController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(string email, string password)
     {
-        var user = await _userService.AuthenticateUser(email, password);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.PasswordHash == password);
         if (user == null)
         {
             ViewBag.ErrorMessage = "Nieprawidłowy email lub hasło.";
@@ -36,7 +37,8 @@ public class AuthController : Controller
         {
             new Claim(ClaimTypes.Name, user.Username),
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role)
+            new Claim(ClaimTypes.Role, user.Role),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Dodanie UserId do claimów
         };
 
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -49,14 +51,7 @@ public class AuthController : Controller
         );
 
         // Przekierowanie w zależności od roli użytkownika
-        if (user.Role == "Admin")
-        {
-            return RedirectToAction("Index", "AdminDashboard");
-        }
-        else
-        {
-            return RedirectToAction("Index", "Home");
-        }
+        return user.Role == "Admin" ? RedirectToAction("Index", "AdminDashboard") : RedirectToAction("Index", "Home");
     }
 
     [HttpGet]
@@ -76,20 +71,18 @@ public class AuthController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(User user)
     {
-        
         ModelState.Remove("Role");
-        
+
         if (!ModelState.IsValid)
         {
             var errors = ModelState.Values.SelectMany(v => v.Errors)
                 .Select(e => e.ErrorMessage)
                 .ToList();
             Console.WriteLine("Błędy walidacji: " + string.Join(", ", errors));
-        
             return View(user);
         }
 
-        var existingUser = await _userService.GetUserByEmail(user.Email);
+        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
         if (existingUser != null)
         {
             ViewBag.ErrorMessage = "Konto z tym adresem email już istnieje.";
@@ -99,9 +92,10 @@ public class AuthController : Controller
 
         Console.WriteLine("Rejestracja użytkownika: " + user.Email);
         user.Role = "Student";
-        await _userService.CreateUser(user);
+
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
 
         return RedirectToAction("Login");
     }
 }
-
