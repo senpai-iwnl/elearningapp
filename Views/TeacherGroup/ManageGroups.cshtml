@@ -37,7 +37,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             }
         </td>
         <td>
-            <a href="@Url.Action("EditGroup", "TeacherSubject", new { id = group.Id })" class="btn btn-sm btn-warning">Edytuj Grupę</a>
+            <a href="@Url.Action("EditGroup", "TeacherGroup", new { id = group.Id })" class="btn btn-sm btn-warning">Edytuj Grupę</a>
             <form asp-action="DeleteGroup" method="post" style="display:inline;">
                 <input type="hidden" name="groupId" value="@group.Id" />
                 <button type="submit" class="btn btn-sm btn-danger">Usuń Grupę</button>

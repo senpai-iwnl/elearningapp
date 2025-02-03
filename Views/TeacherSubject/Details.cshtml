@@ -11,13 +11,13 @@ Layout = "~/Views/Shared/_Layout.cshtml";
 <!-- Przycisk do edycji przedmiotu -->
 <a href="@Url.Action("Edit", "TeacherDashboard", new { id = Model.Id })" class="btn btn-warning mb-3">Edytuj Przedmiot</a>
 
-<a href="@Url.Action("AddClass", "TeacherSubject", new { subjectId = Model.Id })" class="btn btn-success mb-3">Dodaj Klasę</a>
+<a href="@Url.Action("AddClass", "TeacherClass", new { subjectId = Model.Id })" class="btn btn-success mb-3">Dodaj Klasę</a>
 
 <!-- Przycisk do zarządzania studentami -->
-<a href="@Url.Action("ManageStudents", "TeacherSubject", new { id = Model.Id })" class="btn btn-info mb-3">Zarządzaj Studentami</a>
+<a href="@Url.Action("ManageStudents", "TeacherStudent", new { id = Model.Id })" class="btn btn-info mb-3">Zarządzaj Studentami</a>
 
 <!-- Przycisk do zarządzania grupami -->
-<a href="@Url.Action("ManageGroups", "TeacherSubject", new { id = Model.Id })" class="btn btn-secondary mb-3">Zarządzaj Grupami</a>
+<a href="@Url.Action("ManageGroups", "TeacherGroup", new { id = Model.Id })" class="btn btn-secondary mb-3">Zarządzaj Grupami</a>
 
 <table class="table table-striped">
     <thead>
@@ -54,10 +54,54 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             }
         </td>
         <td>
-            <a href="@Url.Action("EditClass", "TeacherSubject", new { id = classItem.Id })" class="btn btn-primary btn-sm">Edytuj</a>
-            <a href="@Url.Action("DeleteClass", "TeacherSubject", new { id = classItem.Id })" class="btn btn-danger btn-sm">Usuń</a>
+            <a href="@Url.Action("EditClass", "TeacherClass", new { id = classItem.Id })" class="btn btn-primary btn-sm">Edytuj</a>
+            <a href="@Url.Action("DeleteClass", "TeacherClass", new { id = classItem.Id })" class="btn btn-danger btn-sm">Usuń</a>
         </td>
     </tr>
     }
     </tbody>
 </table>
+
+<h3 class="mt-4">Wszystkie Załączniki Powiązane z Tym Przedmiotem</h3>
+
+@if (Model.Classes != null && Model.Classes.SelectMany(c => c.Documents).Any())
+{
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Nazwa Pliku</th>
+        <th>Klasa</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var classItem in Model.Classes)
+    {
+    @if (classItem.Documents != null && classItem.Documents.Any())
+    {
+    foreach (var doc in classItem.Documents)
+    {
+    <tr>
+        <td>@doc.FileName</td>
+        <td>@classItem.Name</td>
+        <td>
+            <a href="@Url.Action("DownloadDocument", "StudentSubject", new { documentId = doc.Id })"
+               class="btn btn-sm btn-outline-primary">Pobierz</a>
+            <form asp-action="DeleteDocument" asp-controller="TeacherClass" method="post" style="display:inline;">
+                <input type="hidden" name="documentId" value="@doc.Id" />
+                <button type="submit" class="btn btn-sm btn-outline-danger">Usuń</button>
+            </form>
+        </td>
+    </tr>
+    }
+    }
+    }
+    </tbody>
+</table>
+}
+else
+{
+<p>Brak załączników w tym przedmiocie.</p>
+}
+
+

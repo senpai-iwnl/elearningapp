@@ -47,7 +47,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
     {
     <li>
         @doc.FileName
-        <a href="@Url.Action("DownloadDocument", "TeacherSubject", new { documentId = doc.Id })"
+        <a href="@Url.Action("DownloadDocument", "TeacherClass", new { documentId = doc.Id })"
            class="btn btn-sm btn-outline-primary">Pobierz</a>
         <form asp-action="DeleteDocument" method="post" style="display:inline;">
             <input type="hidden" name="documentId" value="@doc.Id" />
