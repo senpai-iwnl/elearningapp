@@ -1,0 +1,35 @@
+﻿@model IEnumerable<e_learning_app.Models.Subject>
+
+@{
+ViewData["Title"] = "Moje Przedmioty";
+Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Moje Przedmioty</h2>
+
+<a href="@Url.Action("Join", "StudentDashboard")" class="btn btn-primary mb-3">Dołącz do Przedmiotu</a>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Nazwa</th>
+        <th>Opis</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var subject in Model)
+    {
+    <tr>
+        <td>@subject.Name</td>
+        <td>@subject.Description</td>
+        <td>
+            <form asp-action="Leave" asp-controller="StudentDashboard" method="post" class="d-inline">
+                <input type="hidden" name="id" value="@subject.Id" />
+                <button type="submit" class="btn btn-danger btn-sm">Opuść</button>
+            </form>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>

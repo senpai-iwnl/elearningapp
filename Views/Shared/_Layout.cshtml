@@ -49,6 +49,12 @@
                     <a class="nav-link" href="@Url.Action("Index", "TeacherDashboard")">Teacher Dashboard</a>
                 </li>
                 }
+                @if (User.IsInRole("Student"))
+                {
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "StudentDashboard")">Student Dashboard</a>
+                </li>
+                }
                 @if (User.Identity.IsAuthenticated)
                 {
                 <li class="nav-item"><a class="nav-link" href="/Auth/Logout">Wyloguj</a></li>
