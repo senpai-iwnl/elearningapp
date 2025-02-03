@@ -73,6 +73,19 @@ public class AppDbContext : DbContext
         // 🔹 Relacja wiele-do-wielu: Group <-> User
         modelBuilder.Entity<Group>()
             .HasMany(g => g.Students)
-            .WithMany();
+            .WithMany(u => u.Groups)
+            .UsingEntity<Dictionary<string, object>>(
+                "GroupUser",
+                j => j.HasOne<User>().WithMany().HasForeignKey("UserId"),
+                j => j.HasOne<Group>().WithMany().HasForeignKey("GroupId")
+            );
+        
+        modelBuilder.Entity<Group>()
+            .HasOne(g => g.Subject)
+            .WithMany(s => s.Groups)
+            .HasForeignKey(g => g.SubjectId)
+            .OnDelete(DeleteBehavior.Cascade); // Usunięcie przedmiotu usuwa wszystkie jego grupy
+
+
     }
 }

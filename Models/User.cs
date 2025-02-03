@@ -29,4 +29,6 @@ public class User
 
     // Przedmioty, do których użytkownik dołączył jako student
     public List<Subject> EnrolledSubjects { get; set; } = new List<Subject>();
+    // 🔹 Relacja wiele-do-wielu z grupami
+    public List<Group> Groups { get; set; } = new List<Group>(); // Grupy, do których użytkownik należy
 }

@@ -15,6 +15,9 @@ public class Subject
     // Studenci zapisani do klasy (relacja wiele-do-wielu)
     public List<User> Students { get; set; } = new List<User>();
     
+    // 🔹 Relacja jeden-do-wielu: Przedmiot może mieć wiele grup
+    public List<Group> Groups { get; set; } = new List<Group>();
+    
     // Kod dołączenia do kursu - 10 losowych znaków
     [Required] 
     [MaxLength(10)] public string JoinCode { get; set; } = GenerateJoinCode();
