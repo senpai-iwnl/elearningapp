@@ -51,9 +51,12 @@
                 }
                 @if (User.IsInRole("Student"))
                 {
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("Index", "StudentDashboard")">Student Dashboard</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "StudentDashboard")">Moje Przedmioty</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "StudentGroup")">Moje Grupy</a>
+                    </li>
                 }
                 @if (User.Identity.IsAuthenticated)
                 {

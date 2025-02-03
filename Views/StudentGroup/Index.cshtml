@@ -1,0 +1,35 @@
+﻿@model IEnumerable<e_learning_app.Models.Group>
+
+@{
+    ViewData["Title"] = "Moje Grupy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Moje Grupy</h2>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Nazwa Grupy</th>
+        <th>Przedmiot</th>
+        <th>Członkowie</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var group in Model)
+    {
+        <tr>
+            <td>@group.Name</td>
+            <td>@group.Subject.Name</td>
+            <td>
+                <ul>
+                    @foreach (var student in group.Students)
+                    {
+                        <li>@student.FirstName @student.LastName (@student.Email)</li>
+                    }
+                </ul>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
